@@ -13,23 +13,23 @@ func main() {
 
 	r.GET("/bark", func(c *gin.Context) {
 		mode := getMode(c.Request.Header["X-Mode"])
-		c.String(http.StatusOK, "[Dog Server v2 - %s] %s", mode, callCat(mode))
+		c.String(http.StatusOK, "[Dog Server v3 - %s] %s", mode, callCat(mode))
 	})
 
 	r.Run()
 }
 
-func getMode(header []string) string {
+func getMode(header []string) (mode string) {
 	x_mode := header
 	x_mode = append(x_mode, "")
-	var mode string
+
 	if x_mode[0] == "active" || x_mode[0] == "preview" {
 		mode = x_mode[0]
 	} else {
 		mode = "active"
 	}
 
-	return mode
+	return
 }
 
 func callCat(mode string) string {
@@ -53,7 +53,5 @@ func callCat(mode string) string {
 
 	// 결과 출력
 	bytes, _ := ioutil.ReadAll(resp.Body)
-	// str := string(bytes) //바이트를 문자열로
-	// fmt.Println(str)
 	return string(bytes)
 }
