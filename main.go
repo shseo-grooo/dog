@@ -23,7 +23,7 @@ func main() {
 
 		mode := getMode(c.Request.Header["X-Mode"])
 
-		c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("[Dog Server v6.3 - %s] %s", mode, callCat(mode))})
+		c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("[Dog Server v6.4 - %s] %s", mode, callCat(mode))})
 	})
 
 	r.Run()
@@ -48,20 +48,22 @@ func getBaseURL(mode string) string {
 	if url == "" {
 		url = "localhost:3000"
 	} else {
-		var port string
-		if mode == "preview" {
-			port = "8888"
-		} else {
-			port = "80"
-		}
-		url = fmt.Sprintf("%s:%s", url, port)
+		// var port string
+		// if mode == "preview" {
+		// 	port = "8888"
+		// } else {
+		// 	port = "80"
+		// }
+		// url = fmt.Sprintf("%s:%s", url, port)
+		url = fmt.Sprintf("%s-%s", url, mode)
 	}
 
 	return url
 }
 
 func callCat(mode string) string {
-	url := fmt.Sprintf("http://%s/animal/cat/meow", getBaseURL(mode))
+	url := fmt.Sprintf("http://%s/meow", getBaseURL(mode))
+	// url := fmt.Sprintf("http://%s/animal/cat/meow", getBaseURL(mode))
 
 	resp, err := http.Get(url)
 	if err != nil {
@@ -69,7 +71,6 @@ func callCat(mode string) string {
 	}
 	defer resp.Body.Close()
 
-	// 결과 출력
 	body, err := ioutil.ReadAll(resp.Body)
 
 	if err != nil {
