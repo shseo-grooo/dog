@@ -17,7 +17,7 @@ jobs:
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag shseogrooo/dog:$(github.event.head_commit.message)
     - name: Push the Docker image
-      run: docker push shseogrooo/dog:$(github.event.head_commit.message)
+      run: docker push shseogrooo/dog:$(github.event.head_commits[0].message)
 
     - name: Clone Github Repo Action
       uses: GuillaumeFalourd/clone-github-repo-action@v1
