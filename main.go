@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -8,12 +9,20 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type CatResponse struct {
+	Message string `json: "message"`
+}
+
 func main() {
 	r := gin.Default()
 
 	r.GET("/bark", func(c *gin.Context) {
+		c.Header("Access-Control-Allow-Origin", "*")
+		c.Header("Access-Control-Allow-Methods", "GET")
+
 		mode := getMode(c.Request.Header["X-Mode"])
-		c.String(http.StatusOK, "[Dog Server v3 - %s] %s", mode, callCat(mode))
+
+		c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("[Dog Server v3 - %s] %s", mode, callCat(mode))})
 	})
 
 	r.Run()
@@ -33,7 +42,7 @@ func getMode(header []string) (mode string) {
 }
 
 func callCat(mode string) string {
-	url := fmt.Sprintf("https://cat-service-%s/meow", mode)
+	url := fmt.Sprintf("http://cat-service-%s/meow", mode)
 	// Request 객체 생성
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
@@ -52,6 +61,16 @@ func callCat(mode string) string {
 	defer resp.Body.Close()
 
 	// 결과 출력
-	bytes, _ := ioutil.ReadAll(resp.Body)
-	return string(bytes)
+	body, err := ioutil.ReadAll(resp.Body)
+
+	if err != nil {
+		panic(err)
+	}
+	var thisRes CatResponse
+	parseErr := json.Unmarshal(body, &thisRes)
+
+	if parseErr != nil {
+		panic(parseErr)
+	}
+	return thisRes.Message
 }
