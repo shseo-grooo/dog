@@ -61,7 +61,7 @@ func getBaseURL(mode string) string {
 }
 
 func callCat(mode string) string {
-	url := fmt.Sprintf("http://%s/meow", getBaseURL(mode))
+	url := fmt.Sprintf("http://%s/animal/cat/meow", getBaseURL(mode))
 
 	resp, err := http.Get(url)
 	if err != nil {
