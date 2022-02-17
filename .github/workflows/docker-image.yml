@@ -33,9 +33,9 @@ jobs:
 
     - name: Run a multi-line script
       run: |
-        cd gitops
+        cd gitops/animal
         TAG=${{ github.event.head_commit.message }}
-        sudo yq e -i '.dogApp.image = '"\"shseogrooo/dog:${TAG}\""'' ./animal/values.yaml
+        sudo yq e -i '.dogApp.image = '"\"shseogrooo/dog:${TAG}\""'' values.yaml
         sudo git commit -am "dog ${TAG}"
         sudo git push
-        sh ./script/out.sh
+        sh ../script/out.sh
