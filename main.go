@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 )
@@ -22,7 +23,7 @@ func main() {
 
 		mode := getMode(c.Request.Header["X-Mode"])
 
-		c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("[Dog Server v3 - %s] %s", mode, callCat(mode))})
+		c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("[Dog Server v4 - %s] %s", mode, callCat(mode))})
 	})
 
 	r.Run()
@@ -41,8 +42,20 @@ func getMode(header []string) (mode string) {
 	return
 }
 
+func getBaseURL(mode string) string {
+	url := os.Getenv("BACKEND_BASE_URL")
+
+	if url == "" {
+		url = "localhost:3000"
+	} else {
+		url = fmt.Sprintf("%s-%s", url, mode)
+	}
+
+	return url
+}
+
 func callCat(mode string) string {
-	url := fmt.Sprintf("http://cat-service-%s/meow", mode)
+	url := fmt.Sprintf("http://%s/meow", getBaseURL(mode))
 	// Request 객체 생성
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
