@@ -15,9 +15,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag shseogrooo/dog:$(github.event.head_commit.message)
+      run: docker build . --file Dockerfile --tag shseogrooo/dog:$(github.event.commits[0].message)
     - name: Push the Docker image
-      run: docker push shseogrooo/dog:$(github.event.head_commits[0].message)
+      run: docker push shseogrooo/dog:$(github.event.commits[0].message)
 
     - name: Clone Github Repo Action
       uses: GuillaumeFalourd/clone-github-repo-action@v1
@@ -29,7 +29,7 @@ jobs:
     - name: Run a multi-line script
       run: |
         cd gitops/animal
-        TAG=$(github.event.head_commit.message)
+        TAG=$(github.event.commits[0].message)
         COL="green"
         sudo yq e -i '.dogApp.image = '"\"shseogrooo/dog:${TAG}\""'' values.yaml
         sudo git commit -am "dog ${TAG}"
