@@ -23,7 +23,7 @@ func main() {
 
 		mode := getMode(c.Request.Header["X-Mode"])
 
-		c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("[Dog Server v6 - %s] %s", mode, callCat(mode))})
+		c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("[Dog Server v6.1 - %s] %s", mode, callCat(mode))})
 	})
 
 	r.Run()
@@ -48,7 +48,13 @@ func getBaseURL(mode string) string {
 	if url == "" {
 		url = "localhost:3000"
 	} else {
-		url = fmt.Sprintf("%s-%s", url, mode)
+		var port string
+		if mode == "preview" {
+			port = "8888"
+		} else {
+			port = "80"
+		}
+		url = fmt.Sprintf("%s:%s", url, port)
 	}
 
 	return url
@@ -56,18 +62,8 @@ func getBaseURL(mode string) string {
 
 func callCat(mode string) string {
 	url := fmt.Sprintf("http://%s/meow", getBaseURL(mode))
-	// Request 객체 생성
-	req, err := http.NewRequest("GET", url, nil)
-	if err != nil {
-		panic(err)
-	}
 
-	//필요시 헤더 추가 가능
-	req.Header.Add("X-Mode", mode)
-
-	// Client객체에서 Request 실행
-	client := &http.Client{}
-	resp, err := client.Do(req)
+	resp, err := http.Get(url)
 	if err != nil {
 		panic(err)
 	}
