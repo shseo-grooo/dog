@@ -21,25 +21,12 @@ func main() {
 		c.Header("Access-Control-Allow-Origin", "*")
 		c.Header("Access-Control-Allow-Methods", "GET")
 
-		mode := getMode(c.Request.Header["X-Mode"])
+		mode := append(c.Request.Header["X-Mode"], "")[0]
 
-		c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("[Dog Server v6.10 - %s] %s", mode, callCat(mode))})
+		c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("[Dog Server v6.11 - %s] %s", mode, callCat(mode))})
 	})
 
 	r.Run()
-}
-
-func getMode(header []string) (mode string) {
-	x_mode := header
-	x_mode = append(x_mode, "")
-
-	if x_mode[0] == "ACTIVE" || x_mode[0] == "PREVIEW" {
-		mode = x_mode[0]
-	} else {
-		mode = "ACTIVE"
-	}
-
-	return
 }
 
 func getBaseURL(mode string) string {
@@ -60,13 +47,6 @@ func callCat(mode string) string {
 	// url := fmt.Sprintf("http://%s/meow", getBaseURL(mode))
 	url := fmt.Sprintf("http://%s/animal/cat/meow", getBaseURL(mode))
 
-	// req, err := http.NewRequest("GET", url, nil)
-	// if err != nil {
-	// 	panic(err)
-	// }
-	// req.Header.Add("X-Mode", mode)
-	// client := &http.Client{}
-	// resp, err := client.Do(req)
 	resp, err := http.Get(url)
 	if err != nil {
 		panic(err)
