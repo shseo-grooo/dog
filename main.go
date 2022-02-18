@@ -23,7 +23,7 @@ func main() {
 
 		mode := getMode(c.Request.Header["X-Mode"])
 
-		c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("[Dog Server v6.6 - %s] %s", mode, callCat(mode))})
+		c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("[Dog Server v6.7 - %s] %s", mode, callCat(mode))})
 	})
 
 	r.Run()
@@ -33,10 +33,10 @@ func getMode(header []string) (mode string) {
 	x_mode := header
 	x_mode = append(x_mode, "")
 
-	if x_mode[0] == "active" || x_mode[0] == "preview" {
+	if x_mode[0] == "ACTIVE" || x_mode[0] == "PREVIEW" {
 		mode = x_mode[0]
 	} else {
-		mode = "active"
+		mode = "ACTIVE"
 	}
 
 	return
@@ -44,44 +44,33 @@ func getMode(header []string) (mode string) {
 
 func getBaseURL(mode string) string {
 	url := os.Getenv("BACKEND_BASE_URL")
+	port := os.Getenv(fmt.Sprintf("CAT_SERVICE_%s_SERVICE_PORT", mode))
 
 	if url == "" {
 		url = "localhost:3000"
 	} else {
-		// var port string
-		// if mode == "preview" {
-		// 	port = "8888"
-		// } else {
-		// 	port = "80"
-		// }
-		// url = fmt.Sprintf("%s:%s", url, port)
-		url = fmt.Sprintf("%s-%s", url, mode)
+		url = fmt.Sprintf("%s:%s", url, port)
+		// url = fmt.Sprintf("%s-%s", url, mode)
 	}
 
 	return url
 }
 
 func callCat(mode string) string {
-	url := fmt.Sprintf("http://%s/meow", getBaseURL(mode))
-	// url := fmt.Sprintf("http://%s/animal/cat/meow", getBaseURL(mode))
+	// url := fmt.Sprintf("http://%s/meow", getBaseURL(mode))
+	url := fmt.Sprintf("http://%s/animal/cat/meow", getBaseURL(mode))
 
-	// Request 객체 생성
-	req, err := http.NewRequest("GET", url, nil)
+	// req, err := http.NewRequest("GET", url, nil)
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// req.Header.Add("X-Mode", mode)
+	// client := &http.Client{}
+	// resp, err := client.Do(req)
+	resp, err := http.Get(url)
 	if err != nil {
 		panic(err)
 	}
-
-	//필요시 헤더 추가 가능
-	req.Header.Add("X-Mode", mode)
-
-	// Client객체에서 Request 실행
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		panic(err)
-	}
-
-	// resp, err := http.Get(url)
 
 	defer resp.Body.Close()
 
