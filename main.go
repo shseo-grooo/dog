@@ -21,9 +21,9 @@ func main() {
 		c.Header("Access-Control-Allow-Origin", "*")
 		c.Header("Access-Control-Allow-Methods", "GET")
 
-		mode := append(c.Request.Header["X-Mode"], "")[0]
+		mode := append(c.Request.Header["X-Mode"], "active")[0]
 
-		c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("[Dog Server v6.13 - %s] %s", mode, callCat(mode))})
+		c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("[Dog Server v6.14 - %s] %s", mode, callCat(mode))})
 	})
 
 	r.Run()
