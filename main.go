@@ -23,7 +23,7 @@ func main() {
 
 		mode := append(c.Request.Header["X-Mode"], "ACTIVE")[0]
 
-		c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("[Dog Server v6.15 - %s] %s", mode, callCat(mode))})
+		c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("[Dog Server v7 - %s] %s", mode, callCat(mode))})
 	})
 
 	r.Run()
@@ -45,7 +45,7 @@ func getBaseURL(mode string) string {
 
 func callCat(mode string) string {
 	// url := fmt.Sprintf("http://%s/meow", getBaseURL(mode))
-	url := fmt.Sprintf("http://%s/animal/cat/meow", getBaseURL(mode))
+	url := fmt.Sprintf("https://%s/animal/cat/meow", getBaseURL(mode))
 
 	resp, err := http.Get(url)
 	if err != nil {
