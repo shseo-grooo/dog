@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -23,7 +24,7 @@ func main() {
 
 		mode := append(c.Request.Header["X-Mode"], "")[0]
 
-		c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("[Dog Server v6.11 - %s] %s", mode, callCat(mode))})
+		c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("[Dog Server v6.12 - %s] %s", mode, callCat(mode))})
 	})
 
 	r.Run()
@@ -31,12 +32,11 @@ func main() {
 
 func getBaseURL(mode string) string {
 	url := os.Getenv("BACKEND_BASE_URL")
-	port := os.Getenv(fmt.Sprintf("CAT_SERVICE_%s_SERVICE_PORT", mode))
 
 	if url == "" {
 		url = "localhost:3000"
 	} else {
-		url = fmt.Sprintf("%s:%s", url, port)
+		url = fmt.Sprintf("%s-%s", url, strings.ToLower(mode))
 		// url = fmt.Sprintf("%s-%s", url, mode)
 	}
 
