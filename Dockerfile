@@ -17,6 +17,6 @@ WORKDIR /dist
 
 RUN cp /build/main .
 
-FROM scratch
+FROM alpine:3.15
 COPY --from=builder /dist/main .
 ENTRYPOINT ["/main"]

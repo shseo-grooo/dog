@@ -23,7 +23,7 @@ func main() {
 
 		mode := getMode(c.Request.Header["X-Mode"])
 
-		c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("[Dog Server v6.5 - %s] %s", mode, callCat(mode))})
+		c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("[Dog Server v6.6 - %s] %s", mode, callCat(mode))})
 	})
 
 	r.Run()
@@ -80,6 +80,9 @@ func callCat(mode string) string {
 	if err != nil {
 		panic(err)
 	}
+
+	// resp, err := http.Get(url)
+
 	defer resp.Body.Close()
 
 	body, err := ioutil.ReadAll(resp.Body)
