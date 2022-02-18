@@ -21,9 +21,9 @@ func main() {
 		c.Header("Access-Control-Allow-Origin", "*")
 		c.Header("Access-Control-Allow-Methods", "GET")
 
-		mode := append(c.Request.Header["X-Mode"], "active")[0]
+		mode := append(c.Request.Header["X-Mode"], "ACTIVE")[0]
 
-		c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("[Dog Server v6.14 - %s] %s", mode, callCat(mode))})
+		c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("[Dog Server v6.15 - %s] %s", mode, callCat(mode))})
 	})
 
 	r.Run()
@@ -31,11 +31,12 @@ func main() {
 
 func getBaseURL(mode string) string {
 	url := os.Getenv("BACKEND_BASE_URL")
+	port := os.Getenv(fmt.Sprintf("CAT_SERVICE_%s_SERVICE_PORT", mode))
 
 	if url == "" {
 		url = "localhost:3000"
 	} else {
-		url = fmt.Sprintf("%s-%s", url, mode)
+		url = fmt.Sprintf("%s:%s", url, port)
 		// url = fmt.Sprintf("%s-%s", url, mode)
 	}
 
