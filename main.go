@@ -18,12 +18,12 @@ func main() {
 	r := gin.Default()
 
 	r.GET("/bark", func(c *gin.Context) {
-		c.Header("Access-Control-Allow-Origin", "*")
+		c.Header("Access-Control-Allow-Origin", "spice.com")
 		c.Header("Access-Control-Allow-Methods", "GET")
 
 		mode := append(c.Request.Header["X-Mode"], "ACTIVE")[0]
 		url := c.Request.Host + c.Request.URL.Path
-		c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("[Dog Server v7.2 - %s from %s] %s", mode, url, callCat(mode))})
+		c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("[Dog Server v7.3 - %s from %s] %s", mode, url, callCat(mode))})
 	})
 
 	r.Run()
