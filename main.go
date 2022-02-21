@@ -6,9 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
-	"time"
 
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -18,25 +16,11 @@ type CatResponse struct {
 
 func main() {
 	r := gin.Default()
-	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"https://foo.com"},
-		AllowMethods:     []string{"PUT", "PATCH"},
-		AllowHeaders:     []string{"Origin"},
-		ExposeHeaders:    []string{"Content-Length"},
-		AllowCredentials: true,
-		AllowOriginFunc: func(origin string) bool {
-			return origin == "https://github.com"
-		},
-		MaxAge: 12 * time.Hour,
-	}))
 
 	r.GET("/bark", func(c *gin.Context) {
-		// c.Header("Access-Control-Allow-Origin", "spice.com")
-		// c.Header("Access-Control-Allow-Methods", "GET")
-
 		mode := append(c.Request.Header["X-Mode"], "ACTIVE")[0]
 		url := c.Request.Host + c.Request.URL.Path
-		c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("[Dog Server v7.4 - %s from %s] %s", mode, url, callCat(mode))})
+		c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("[Dog Server v7.5 - %s from %s] %s", mode, url, callCat(mode))})
 	})
 
 	r.Run()
