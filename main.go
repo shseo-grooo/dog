@@ -19,8 +19,8 @@ type CatResponse struct {
 func main() {
 	r := gin.Default()
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:  []string{"https://foo.com"},
-		AllowMethods:  []string{"PUT", "PATCH"},
+		AllowOrigins:  []string{"https://foo.com", "http://localhost:8888"},
+		AllowMethods:  []string{"GET", "PUT", "PATCH"},
 		AllowHeaders:  []string{"Origin"},
 		ExposeHeaders: []string{"Content-Length"},
 		MaxAge:        12 * time.Hour,
@@ -32,7 +32,7 @@ func main() {
 
 		mode := append(c.Request.Header["X-Mode"], "ACTIVE")[0]
 		url := c.Request.Host + c.Request.URL.Path
-		c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("[Dog Server v7.6 - %s from %s] %s", mode, url, callCat(mode))})
+		c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("[Dog Server v7.7 - %s from %s] %s", mode, url, callCat(mode))})
 	})
 
 	r.Run()
