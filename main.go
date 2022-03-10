@@ -33,11 +33,7 @@ func main() {
 
 		mode := append(c.Request.Header["X-Mode"], "ACTIVE")[0]
 		url := c.Request.Host + c.Request.URL.Path
-		fmt.Println("=============")
-		fmt.Println(mode)
-		fmt.Println(url)
-		fmt.Println("=============")
-		c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("[Dog Server v7.8.1 - %s from %s] %s", mode, url, callCat(mode))})
+		c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("[Dog Server v7.9 - %s from %s] %s", mode, url, callCat(mode))})
 	})
 
 	r.Run()
