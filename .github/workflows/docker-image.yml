@@ -36,6 +36,7 @@ jobs:
         cd gitops/animal
         TAG=${{ github.event.head_commit.message }}
         sudo yq e -i '.dogApp.image = '"\"shseogrooo/dog:${TAG}\""'' values.yaml
+        sudo yq e -i '.dogApp.version = '"\"${TAG}\""'' values.yaml
         sudo sh ../script/out.sh
         sudo git commit -am "dog ${TAG}"
         sudo git push
